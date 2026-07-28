@@ -219,6 +219,17 @@ Open the HiddenServers settings and use the corresponding **Show** button, or us
 - Use `src/userplugins`; do not copy the plugin into `src/plugins`.
 - This repository contains only plugin source code and public documentation.
 
+<!-- acknowledgements:start -->
+## Acknowledgements
+
+HiddenServers was inspired by [ServerHider](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/ServerHider) by **DevilBro**.
+
+I used the original plugin and liked the ability to remove servers from the server list, but I wanted proper Discord folder support and clearer recovery controls. HiddenServers was created as an independent implementation for Vencord, with complete folder hiding, strictly separate storage for individual servers and folders, and dedicated settings for restoring hidden items.
+
+Many thanks to DevilBro for the original work and for inspiring this project.
+<!-- acknowledgements:end -->
+
 ## License
 
 GPL-3.0-or-later.
+
