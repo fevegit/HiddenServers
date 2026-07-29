@@ -1,0 +1,88 @@
+name: "Bug report / Informe de error"
+description: "Report a reproducible problem / Comunica un problema reproducible"
+title: "[Bug] "
+labels:
+  - bug
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for reporting the problem. Gracias por informar del problema.
+
+  - type: input
+    id: plugin-version
+    attributes:
+      label: "Plugin or theme version / Versión"
+      placeholder: "Example / Ejemplo: v1.2.0"
+    validations:
+      required: true
+
+  - type: input
+    id: vencord-version
+    attributes:
+      label: "Vencord version / Versión de Vencord"
+      placeholder: "Settings > Vencord > About"
+    validations:
+      required: true
+
+  - type: input
+    id: discord-version
+    attributes:
+      label: "Discord version / Versión de Discord"
+      placeholder: "Stable, PTB, Canary and build number"
+    validations:
+      required: true
+
+  - type: dropdown
+    id: operating-system
+    attributes:
+      label: "Operating system / Sistema operativo"
+      options:
+        - Windows
+        - Linux
+        - macOS
+        - Other / Otro
+    validations:
+      required: true
+
+  - type: textarea
+    id: description
+    attributes:
+      label: "Problem / Problema"
+      description: "Explain what happened / Explica qué ocurrió"
+    validations:
+      required: true
+
+  - type: textarea
+    id: steps
+    attributes:
+      label: "Steps to reproduce / Pasos para reproducir"
+      placeholder: |
+        1.
+        2.
+        3.
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: "Expected behavior / Comportamiento esperado"
+    validations:
+      required: true
+
+  - type: textarea
+    id: logs
+    attributes:
+      label: "Logs, screenshots or video / Logs, capturas o vídeo"
+      description: "Remove private information before posting / Elimina información privada antes de publicar"
+
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: "Checks / Comprobaciones"
+      options:
+        - label: "I updated Vencord and the plugin/theme / He actualizado Vencord y el plugin/tema"
+          required: true
+        - label: "I searched for an existing issue / He buscado un issue existente"
+          required: true
