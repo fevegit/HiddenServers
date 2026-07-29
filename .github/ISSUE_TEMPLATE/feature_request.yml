@@ -1,0 +1,30 @@
+name: "Feature request / Propuesta de mejora"
+description: "Suggest an improvement / Propón una mejora"
+title: "[Feature] "
+labels:
+  - enhancement
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: "Problem or need / Problema o necesidad"
+      description: "What limitation are you trying to solve? / ¿Qué limitación quieres resolver?"
+    validations:
+      required: true
+
+  - type: textarea
+    id: proposal
+    attributes:
+      label: "Proposed solution / Solución propuesta"
+    validations:
+      required: true
+
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: "Alternatives considered / Alternativas consideradas"
+
+  - type: textarea
+    id: context
+    attributes:
+      label: "Additional context / Contexto adicional"
