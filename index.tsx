@@ -10,6 +10,7 @@ import { Logger } from "@utils/Logger";
 import definePlugin, { OptionType } from "@utils/types";
 import { findStoreLazy } from "@webpack";
 import { GuildStore, Menu, React, showToast, Toasts } from "@webpack/common";
+import { t } from "./i18n";
 
 type HiddenItemType = "server" | "folder";
 
@@ -44,13 +45,19 @@ const CHANGE_EVENT = "vc-hidden-servers-data-change";
 const settings = definePluginSettings({
     hiddenServerIds: {
         type: OptionType.STRING,
-        description: "Internal list of individually hidden server IDs.",
+        description: t(
+            "Lista interna de IDs de servidores ocultos individualmente.",
+            "Internal list of individually hidden server IDs."
+        ),
         default: "[]",
         hidden: true
     },
     hiddenFolderIds: {
         type: OptionType.STRING,
-        description: "Internal list of hidden folder IDs.",
+        description: t(
+            "Lista interna de IDs de carpetas ocultas.",
+            "Internal list of hidden folder IDs."
+        ),
         default: "[]",
         hidden: true
     },
@@ -226,13 +233,15 @@ function toggleHiddenItem(type: HiddenItemType, rawId: unknown) {
 
     writeIdList(type, nextIds);
 
-    const itemLabel = type === "server" ? "server" : "folder";
-    const actionLabel = alreadyHidden ? "shown" : "hidden";
+    const message = type === "server"
+        ? alreadyHidden
+            ? t("Servidor visible de nuevo.", "Server shown.")
+            : t("Servidor oculto.", "Server hidden.")
+        : alreadyHidden
+            ? t("Carpeta visible de nuevo.", "Folder shown.")
+            : t("Carpeta oculta.", "Folder hidden.");
 
-    showToast(
-        `${itemLabel[0].toUpperCase()}${itemLabel.slice(1)} ${actionLabel}.`,
-        Toasts.Type.SUCCESS
-    );
+    showToast(message, Toasts.Type.SUCCESS);
 }
 
 function clearHiddenItems(type: HiddenItemType) {
@@ -240,8 +249,18 @@ function clearHiddenItems(type: HiddenItemType) {
     writeIdList(type, []);
 
     if (count > 0) {
-        const label = type === "server" ? "servers" : "folders";
-        showToast(`All hidden ${label} are visible again.`, Toasts.Type.SUCCESS);
+        showToast(
+            type === "server"
+                ? t(
+                    "Todos los servidores ocultos vuelven a estar visibles.",
+                    "All hidden servers are visible again."
+                )
+                : t(
+                    "Todas las carpetas ocultas vuelven a estar visibles.",
+                    "All hidden folders are visible again."
+                ),
+            Toasts.Type.SUCCESS
+        );
     }
 }
 
@@ -252,7 +271,13 @@ function clearEverything() {
     applyHiddenStyles();
     window.dispatchEvent(new Event(CHANGE_EVENT));
 
-    showToast("All hidden servers and folders are visible again.", Toasts.Type.SUCCESS);
+    showToast(
+        t(
+            "Todos los servidores y carpetas ocultos vuelven a estar visibles.",
+            "All hidden servers and folders are visible again."
+        ),
+        Toasts.Type.SUCCESS
+    );
 }
 
 function getGuildFolders(): GuildFolderLike[] {
@@ -292,7 +317,7 @@ function getFolderDisplayName(folderId: string): string {
         .filter((name): name is string => typeof name === "string" && name.length > 0);
 
     if (guildNames.length === 0) {
-        return "Unnamed folder";
+        return t("Carpeta sin nombre", "Unnamed folder");
     }
 
     const preview = guildNames.slice(0, 3).join(", ");
@@ -401,7 +426,7 @@ function removeHiddenStyles() {
 
 function getItemName(type: HiddenItemType, id: string): string {
     if (type === "server") {
-        return GuildStore.getGuild(id)?.name ?? "Unknown server";
+        return GuildStore.getGuild(id)?.name ?? t("Servidor desconocido", "Unknown server");
     }
 
     return getFolderDisplayName(id);
@@ -420,8 +445,12 @@ function HiddenItemsManager({ type }: HiddenItemsManagerProps) {
     }, []);
 
     const ids = getIds(type);
-    const pluralLabel = type === "server" ? "servers" : "folders";
-    const title = type === "server" ? "Hidden servers" : "Hidden folders";
+    const emptyLabel = type === "server"
+        ? t("No hay servidores ocultos.", "No hidden servers.")
+        : t("No hay carpetas ocultas.", "No hidden folders.");
+    const title = type === "server"
+        ? t("Servidores ocultos", "Hidden servers")
+        : t("Carpetas ocultas", "Hidden folders");
 
     return (
         <section style={styles.section}>
@@ -434,20 +463,26 @@ function HiddenItemsManager({ type }: HiddenItemsManagerProps) {
                     disabled={ids.length === 0}
                     onClick={() => clearHiddenItems(type)}
                 >
-                    Unhide all
+                    {t("Mostrar todos", "Unhide all")}
                 </button>
             </div>
 
             <p style={styles.description}>
                 {type === "server"
-                    ? "Only servers hidden individually appear here. Hiding a folder never adds its servers to this list."
-                    : "Only folders hidden as complete folders appear here. Their server IDs remain separate."}
+                    ? t(
+                        "Aquí solo aparecen los servidores ocultos individualmente. Ocultar una carpeta nunca añade sus servidores a esta lista.",
+                        "Only servers hidden individually appear here. Hiding a folder never adds its servers to this list."
+                    )
+                    : t(
+                        "Aquí solo aparecen las carpetas ocultas por completo. Los IDs de sus servidores permanecen separados.",
+                        "Only folders hidden as complete folders appear here. Their server IDs remain separate."
+                    )}
             </p>
 
             {ids.length === 0
                 ? (
                     <div style={styles.empty}>
-                        No hidden {pluralLabel}.
+                        {emptyLabel}
                     </div>
                 )
                 : ids.map(id => (
@@ -462,7 +497,7 @@ function HiddenItemsManager({ type }: HiddenItemsManagerProps) {
                             style={styles.button}
                             onClick={() => toggleHiddenItem(type, id)}
                         >
-                            Show
+                            {t("Mostrar", "Show")}
                         </button>
                     </div>
                 ))}
@@ -485,8 +520,12 @@ function patchGuildContextMenu(children: any[], props: GuildContextProps) {
 
     const isHidden = getIds(type).includes(id);
     const label = isHidden
-        ? type === "server" ? "Unhide server" : "Unhide folder"
-        : type === "server" ? "Hide server" : "Hide folder";
+        ? type === "server"
+            ? t("Mostrar servidor", "Unhide server")
+            : t("Mostrar carpeta", "Unhide folder")
+        : type === "server"
+            ? t("Ocultar servidor", "Hide server")
+            : t("Ocultar carpeta", "Hide folder");
 
     children.push(
         <Menu.MenuSeparator key="hidden-servers-separator" />,
@@ -506,7 +545,10 @@ function handleGuildFolderStoreChange() {
 
 export default definePlugin({
     name: "HiddenServers",
-    description: "Hide individual servers or complete server folders from the guild list.",
+    description: t(
+        "Oculta servidores individuales o carpetas completas de la lista de servidores.",
+        "Hide individual servers or complete server folders from the guild list."
+    ),
     authors: [{ name: "feve", id: 0n }],
     tags: ["Servers", "Organisation", "Privacy"],
     settings,
@@ -517,7 +559,10 @@ export default definePlugin({
     },
 
     toolboxActions: {
-        "Unhide every server and folder": clearEverything
+        [t(
+            "Mostrar todos los servidores y carpetas",
+            "Unhide every server and folder"
+        )]: clearEverything
     },
 
     start() {
