@@ -6,16 +6,20 @@
 
 export type SupportedLanguage = "es" | "en";
 
-export function getLanguage(): SupportedLanguage {
+function readLocale(): string {
     const documentLocale = typeof document !== "undefined"
-        ? document.documentElement.lang
+        ? document.documentElement?.lang ?? ""
         : "";
-    const navigatorLocale = typeof navigator !== "undefined"
-        ? navigator.language
-        : "";
-    const locale = documentLocale || navigatorLocale || "en";
 
-    return locale.toLowerCase().startsWith("es") ? "es" : "en";
+    const navigatorLocale = typeof navigator !== "undefined"
+        ? navigator.language ?? ""
+        : "";
+
+    return documentLocale || navigatorLocale || "en";
+}
+
+export function getLanguage(): SupportedLanguage {
+    return readLocale().toLowerCase().startsWith("es") ? "es" : "en";
 }
 
 export function t(spanish: string, english: string): string {
