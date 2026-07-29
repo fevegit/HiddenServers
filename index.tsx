@@ -45,19 +45,23 @@ const CHANGE_EVENT = "vc-hidden-servers-data-change";
 const settings = definePluginSettings({
     hiddenServerIds: {
         type: OptionType.STRING,
-        description: t(
-            "Lista interna de IDs de servidores ocultos individualmente.",
-            "Internal list of individually hidden server IDs."
-        ),
+        get description() {
+            return t(
+                "Lista interna de IDs de servidores ocultos individualmente.",
+                "Internal list of individually hidden server IDs."
+            );
+        },
         default: "[]",
         hidden: true
     },
     hiddenFolderIds: {
         type: OptionType.STRING,
-        description: t(
-            "Lista interna de IDs de carpetas ocultas.",
-            "Internal list of hidden folder IDs."
-        ),
+        get description() {
+            return t(
+                "Lista interna de IDs de carpetas ocultas.",
+                "Internal list of hidden folder IDs."
+            );
+        },
         default: "[]",
         hidden: true
     },
@@ -545,10 +549,12 @@ function handleGuildFolderStoreChange() {
 
 export default definePlugin({
     name: "HiddenServers",
-    description: t(
-        "Oculta servidores individuales o carpetas completas de la lista de servidores.",
-        "Hide individual servers or complete server folders from the guild list."
-    ),
+    get description() {
+        return t(
+            "Oculta servidores individuales o carpetas completas de la lista de servidores.",
+            "Hide individual servers or complete server folders from the guild list."
+        );
+    },
     authors: [{ name: "feve", id: 0n }],
     tags: ["Servers", "Organisation", "Privacy"],
     settings,

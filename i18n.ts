@@ -4,22 +4,25 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
+import { LocaleStore } from "@webpack/common";
+
 export type SupportedLanguage = "es" | "en";
 
-function readLocale(): string {
-    const documentLocale = typeof document !== "undefined"
-        ? document.documentElement?.lang ?? ""
-        : "";
+interface DiscordLocaleStore {
+    locale?: string;
+    getLocale?: () => string;
+}
 
-    const navigatorLocale = typeof navigator !== "undefined"
-        ? navigator.language ?? ""
-        : "";
+function readDiscordLocale(): string {
+    const store = LocaleStore as unknown as DiscordLocaleStore | undefined;
 
-    return documentLocale || navigatorLocale || "en";
+    return store?.locale
+        ?? store?.getLocale?.()
+        ?? "en-US";
 }
 
 export function getLanguage(): SupportedLanguage {
-    return readLocale().toLowerCase().startsWith("es") ? "es" : "en";
+    return readDiscordLocale().toLowerCase().startsWith("es") ? "es" : "en";
 }
 
 export function t(spanish: string, english: string): string {
