@@ -232,17 +232,3 @@ Many thanks to DevilBro for the original work and for inspiring this project.
 ## License
 
 GPL-3.0-or-later.
-
-<!-- spanish-documentation:start -->
-## Documentación en español
-
-**HiddenServers** permite ocultar servidores individuales o carpetas completas de la barra lateral de Discord.
-
-### Funciones
-
-- Clic derecho en un servidor para ocultarlo o volver a mostrarlo.
-- Clic derecho en una carpeta para ocultarla o volver a mostrarla.
-- Persistencia separada para servidores y carpetas.
-- Gestores para recuperar elementos ocultos.
-- Interfaz automática en español o inglés según el idioma de Discord.
-<!-- spanish-documentation:end -->
