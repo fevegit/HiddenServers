@@ -9,7 +9,46 @@ import { definePluginSettings } from "@api/Settings";
 import { Logger } from "@utils/Logger";
 import definePlugin, { OptionType } from "@utils/types";
 import { findStoreLazy } from "@webpack";
-import { GuildStore, Menu, React, showToast, Toasts } from "@webpack/common";
+import {
+    GuildStore,
+    Menu,
+    React,
+    showToast as nativeShowToast
+} from "@webpack/common";
+
+const Toasts = {
+    Type: {
+        MESSAGE: "message",
+        SUCCESS: "success",
+        FAILURE: "critical",
+        ERROR: "critical"
+    }
+};
+
+function showToast(
+    message: string,
+    type: string = Toasts.Type.MESSAGE,
+    options?: { duration?: number }
+) {
+    const payload: {
+        text: string;
+        variant?: "success" | "critical";
+        duration?: number;
+    } = { text: message };
+
+    if (type === Toasts.Type.SUCCESS) {
+        payload.variant = "success";
+    } else if (type === Toasts.Type.FAILURE) {
+        payload.variant = "critical";
+    }
+
+    if (options?.duration !== undefined) {
+        payload.duration = options.duration;
+    }
+
+    nativeShowToast(payload);
+}
+
 import { t } from "./i18n";
 
 type HiddenItemType = "server" | "folder";
